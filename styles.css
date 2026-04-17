@@ -277,38 +277,39 @@ body::before {
 
 .upgrade-card {
     background: var(--gradient-primary);
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
     border-radius: var(--radius-lg);
     text-align: center;
     box-shadow: var(--shadow-lg);
 }
 
 .upgrade-icon {
-    font-size: 2rem;
-    margin-bottom: var(--spacing-sm);
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-xs);
 }
 
 .upgrade-card h4 {
-    font-size: 1rem;
+    font-size: 0.875rem;
     font-weight: 700;
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: 0.25rem;
     color: white;
 }
 
 .upgrade-card p {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.9);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
 }
 
 .btn-upgrade {
     width: 100%;
-    padding: var(--spacing-sm) var(--spacing-lg);
+    padding: 0.375rem var(--spacing-md);
     background: white;
     color: var(--primary-dark);
     border: none;
     border-radius: var(--radius-md);
     font-weight: 600;
+    font-size: 0.75rem;
     cursor: pointer;
     transition: all var(--transition-base);
 }
@@ -572,7 +573,7 @@ body::before {
 /* Stats Grid */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-xl);
 }
@@ -2654,7 +2655,7 @@ body::before {
     }
     
     .stats-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
     }
     
     .filters-bar {
@@ -2697,6 +2698,10 @@ body::before {
     
     .calc-tab {
         width: 100%;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
     }
     
     .contact-item img {
