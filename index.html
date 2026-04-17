@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Financial - Personal Finance Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon">₦</div>
+                <div class="logo-text">
+                    <span class="logo-nova">NOVA</span>
+                    <span class="logo-sub">Financial</span>
+                </div>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-item active" data-page="dashboard">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="#transactions" class="nav-item" data-page="transactions">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                <span>Transactions</span>
+            </a>
+            <a href="#analytics" class="nav-item" data-page="analytics">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                <span>Analytics</span>
+            </a>
+            <a href="#calculator" class="nav-item" data-page="calculator">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                    <line x1="8" y1="6" x2="16" y2="6"></line>
+                    <line x1="8" y1="10" x2="16" y2="10"></line>
+                    <line x1="8" y1="14" x2="10" y2="14"></line>
+                    <line x1="14" y1="14" x2="16" y2="14"></line>
+                    <line x1="8" y1="18" x2="10" y2="18"></line>
+                    <line x1="14" y1="18" x2="16" y2="18"></line>
+                </svg>
+                <span>Calculator</span>
+                <span class="badge">NEW</span>
+            </a>
+            <a href="#ai-insights" class="nav-item" data-page="ai-insights">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <span>AI Insights</span>
+                <span class="badge ai-badge">AI</span>
+            </a>
+            <a href="#cards" class="nav-item" data-page="cards">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                </svg>
+                <span>My Cards</span>
+            </a>
+            <a href="#settings" class="nav-item" data-page="settings">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m7.071-13.071l-4.243 4.243m-5.657 5.656L4.93 20.07M23 12h-6M7 12H1m13.071 7.071l-4.243-4.243m-5.657-5.657L4.93 3.93"></path>
+                </svg>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="upgrade-card">
+                <div class="upgrade-icon">⚡</div>
+                <h4>Upgrade to Pro</h4>
+                <p>Get AI insights & unlimited access</p>
+                <button class="btn-upgrade">Upgrade Now</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="search-bar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input type="text" placeholder="Search transactions, insights...">
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="icon-btn notification-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="notification-dot"></span>
+                </button>
+                <div class="user-profile">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop" alt="User">
+                    <div class="user-info">
+                        <span class="user-name">John Doe</span>
+                        <span class="user-badge">Premium</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Container -->
+        <div class="page-container">
+            
+            <!-- Dashboard Page -->
+            <div class="page active" id="dashboard-page">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Good <span id="timeGreeting">morning</span>, John 👋</h1>
+                        <p class="page-subtitle">Here's what's happening with your finances</p>
+                    </div>
+                    <div class="page-actions">
+                        <button class="btn btn-secondary">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Export
+                        </button>
+                        <button class="btn btn-primary" id="addTransactionBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Add Transaction
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Balance Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card balance-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Total Balance</span>
+                            <div class="stat-trend positive">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="18 15 12 9 6 15"></polyline>
+                                </svg>
+                                <span>2.4%</span>
+                            </div>
+                        </div>
+                        <div class="stat-value">$24,563.89</div>
+                        <div class="stat-footer">vs last month</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Income</span>
+                            <div class="stat-trend positive">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="18 15 12 9 6 15"></polyline>
+                                </svg>
+                                <span>8.2%</span>
+                            </div>
+                        </div>
+                        <div class="stat-value">$8,249.50</div>
+                        <div class="stat-footer">This month</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Expenses</span>
+                            <div class="stat-trend negative">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                                <span>3.1%</span>
+                            </div>
+                        </div>
+                        <div class="stat-value">$3,842.75</div>
+                        <div class="stat-footer">This month</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Savings</span>
+                            <div class="stat-trend positive">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="18 15 12 9 6 15"></polyline>
+                                </svg>
+                                <span>5.8%</span>
+                            </div>
+                        </div>
+                        <div class="stat-value">$12,450.00</div>
+                        <div class="stat-footer">Total saved</div>
+                    </div>
+                </div>
+
+                <!-- Charts and Widgets Grid -->
+                <div class="dashboard-grid">
+                    
+                    <!-- Spending Activity Chart -->
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h3>Spending Activity</h3>
+                            <div class="chart-controls">
+                                <button class="chart-toggle active" data-period="week">Week</button>
+                                <button class="chart-toggle" data-period="month">Month</button>
+                                <button class="chart-toggle" data-period="year">Year</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="spendingChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Quick Transfer -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Quick Transfer</h3>
+                        </div>
+                        <div class="quick-transfer">
+                            <div class="contacts-list">
+                                <div class="contact-item">
+                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" alt="Sarah">
+                                    <span>Sarah</span>
+                                </div>
+                                <div class="contact-item">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" alt="Mike">
+                                    <span>Mike</span>
+                                </div>
+                                <div class="contact-item">
+                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop" alt="Emma">
+                                    <span>Emma</span>
+                                </div>
+                                <div class="contact-item">
+                                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop" alt="David">
+                                    <span>David</span>
+                                </div>
+                                <div class="contact-item">
+                                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" alt="Lisa">
+                                    <span>Lisa</span>
+                                </div>
+                            </div>
+                            <div class="transfer-input">
+                                <input type="number" placeholder="0.00" id="transferAmount">
+                                <button class="btn btn-primary" id="sendMoneyBtn">Send Money</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Transactions -->
+                    <div class="card transactions-card">
+                        <div class="card-header">
+                            <h3>Recent Transactions</h3>
+                            <a href="#transactions" class="link">View All</a>
+                        </div>
+                        <div class="transactions-list" id="recentTransactions">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Spending by Category -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Spending by Category</h3>
+                        </div>
+                        <div class="category-chart">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                        <div class="category-legend" id="categoryLegend">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Monthly Budget -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Monthly Budget</h3>
+                            <span class="budget-status">$2,157.25 left</span>
+                        </div>
+                        <div class="budget-progress">
+                            <div class="budget-bar">
+                                <div class="budget-fill" style="width: 64%"></div>
+                            </div>
+                            <div class="budget-info">
+                                <span>$3,842.75 spent</span>
+                                <span>$6,000.00 budget</span>
+                            </div>
+                        </div>
+                        <div class="budget-categories">
+                            <div class="budget-category">
+                                <div class="category-info">
+                                    <span class="category-name">Shopping</span>
+                                    <span class="category-amount">$1,200</span>
+                                </div>
+                                <div class="category-bar">
+                                    <div class="category-fill shopping" style="width: 60%"></div>
+                                </div>
+                            </div>
+                            <div class="budget-category">
+                                <div class="category-info">
+                                    <span class="category-name">Food & Dining</span>
+                                    <span class="category-amount">$890</span>
+                                </div>
+                                <div class="category-bar">
+                                    <div class="category-fill food" style="width: 45%"></div>
+                                </div>
+                            </div>
+                            <div class="budget-category">
+                                <div class="category-info">
+                                    <span class="category-name">Transport</span>
+                                    <span class="category-amount">$450</span>
+                                </div>
+                                <div class="category-bar">
+                                    <div class="category-fill transport" style="width: 30%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Transactions Page -->
+            <div class="page" id="transactions-page">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Transactions</h1>
+                        <p class="page-subtitle">Manage and filter your transactions</p>
+                    </div>
+                </div>
+
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="income">Income</button>
+                        <button class="filter-btn" data-filter="expense">Expense</button>
+                    </div>
+                    <div class="filter-group">
+                        <select class="filter-select" id="categoryFilter">
+                            <option value="all">All Categories</option>
+                            <option value="shopping">Shopping</option>
+                            <option value="food">Food & Dining</option>
+                            <option value="transport">Transport</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="bills">Bills & Utilities</option>
+                            <option value="salary">Salary</option>
+                        </select>
+                        <input type="date" class="filter-date" id="dateFilter">
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="transactions-table-wrapper">
+                        <table class="transactions-table" id="transactionsTable">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Category</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionsList">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Page -->
+            <div class="page" id="analytics-page">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Analytics</h1>
+                        <p class="page-subtitle">Deep insights into your financial health</p>
+                    </div>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Income vs Expenses</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="incomeExpenseChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Net Worth Trend</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="netWorthChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Category Breakdown</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="categoryBreakdownChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Financial Health Score</h3>
+                        </div>
+                        <div class="health-score">
+                            <div class="score-circle">
+                                <svg viewBox="0 0 200 200">
+                                    <circle cx="100" cy="100" r="90" class="score-bg"></circle>
+                                    <circle cx="100" cy="100" r="90" class="score-fill" style="stroke-dasharray: 565; stroke-dashoffset: 141;"></circle>
+                                </svg>
+                                <div class="score-value">75</div>
+                            </div>
+                            <div class="score-details">
+                                <div class="score-item">
+                                    <span>Savings Rate</span>
+                                    <strong>Good</strong>
+                                </div>
+                                <div class="score-item">
+                                    <span>Debt-to-Income</span>
+                                    <strong>Excellent</strong>
+                                </div>
+                                <div class="score-item">
+                                    <span>Budget Adherence</span>
+                                    <strong>Average</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculator Page -->
+            <div class="page" id="calculator-page">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Financial Calculators</h1>
+                        <p class="page-subtitle">Plan your finances with powerful calculators</p>
+                    </div>
+                </div>
+
+                <div class="calculator-tabs">
+                    <button class="calc-tab active" data-calc="emi">EMI Calculator</button>
+                    <button class="calc-tab" data-calc="investment">Investment Returns</button>
+                    <button class="calc-tab" data-calc="budget">Budget Planner</button>
+                    <button class="calc-tab" data-calc="savings">Savings Goal</button>
+                    <button class="calc-tab" data-calc="tax">Tax Calculator</button>
+                </div>
+
+                <!-- EMI Calculator -->
+                <div class="calculator-panel active" id="emi-calculator">
+                    <div class="calc-grid">
+                        <div class="card calc-input-card">
+                            <h3>Loan Details</h3>
+                            <div class="form-group">
+                                <label>Loan Amount (₹)</label>
+                                <input type="number" id="loanAmount" value="1000000" class="calc-input">
+                                <input type="range" id="loanAmountSlider" min="100000" max="10000000" step="100000" value="1000000" class="calc-slider">
+                            </div>
+                            <div class="form-group">
+                                <label>Interest Rate (% per annum)</label>
+                                <input type="number" id="interestRate" value="8.5" step="0.1" class="calc-input">
+                                <input type="range" id="interestRateSlider" min="5" max="20" step="0.1" value="8.5" class="calc-slider">
+                            </div>
+                            <div class="form-group">
+                                <label>Loan Tenure (Years)</label>
+                                <input type="number" id="loanTenure" value="20" class="calc-input">
+                                <input type="range" id="loanTenureSlider" min="1" max="30" value="20" class="calc-slider">
+                            </div>
+                            <button class="btn btn-primary" id="calculateEMI">Calculate EMI</button>
+                        </div>
+
+                        <div class="card calc-result-card">
+                            <h3>EMI Breakdown</h3>
+                            <div class="emi-result">
+                                <div class="emi-main">
+                                    <span class="emi-label">Monthly EMI</span>
+                                    <span class="emi-value" id="emiAmount">₹0</span>
+                                </div>
+                                <div class="emi-details">
+                                    <div class="emi-detail-item">
+                                        <span>Principal Amount</span>
+                                        <strong id="principalAmount">₹0</strong>
+                                    </div>
+                                    <div class="emi-detail-item">
+                                        <span>Total Interest</span>
+                                        <strong id="totalInterest">₹0</strong>
+                                    </div>
+                                    <div class="emi-detail-item total">
+                                        <span>Total Payment</span>
+                                        <strong id="totalPayment">₹0</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-container" style="margin-top: 20px;">
+                                <canvas id="emiChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Investment Calculator -->
+                <div class="calculator-panel" id="investment-calculator">
+                    <div class="calc-grid">
+                        <div class="card calc-input-card">
+                            <h3>Investment Details</h3>
+                            <div class="form-group">
+                                <label>Initial Investment (₹)</label>
+                                <input type="number" id="initialInvestment" value="100000" class="calc-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Monthly Contribution (₹)</label>
+                                <input type="number" id="monthlyContribution" value="5000" class="calc-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Expected Return (% per annum)</label>
+                                <input type="number" id="expectedReturn" value="12" step="0.1" class="calc-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Time Period (Years)</label>
+                                <input type="number" id="investmentPeriod" value="10" class="calc-input">
+                            </div>
+                            <button class="btn btn-primary" id="calculateInvestment">Calculate Returns</button>
+                        </div>
+
+                        <div class="card calc-result-card">
+                            <h3>Investment Growth</h3>
+                            <div class="investment-result">
+                                <div class="investment-main">
+                                    <span class="investment-label">Future Value</span>
+                                    <span class="investment-value" id="futureValue">₹0</span>
+                                </div>
+                                <div class="investment-details">
+                                    <div class="investment-detail-item">
+                                        <span>Total Investment</span>
+                                        <strong id="totalInvested">₹0</strong>
+                                    </div>
+                                    <div class="investment-detail-item">
+                                        <span>Total Returns</span>
+                                        <strong id="totalReturns">₹0</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-container" style="margin-top: 20px;">
+                                <canvas id="investmentChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Budget Planner -->
+                <div class="calculator-panel" id="budget-calculator">
+                    <div class="calc-grid">
+                        <div class="card calc-input-card">
+                            <h3>Monthly Income</h3>
+                            <div class="form-group">
+                                <label>Monthly Income (₹)</label>
+                                <input type="number" id="monthlyIncome" value="50000" class="calc-input">
+                            </div>
+                            <button class="btn btn-primary" id="calculateBudget">Calculate Budget</button>
+                            <div class="budget-rule-info">
+                                <h4>50/30/20 Rule</h4>
+                                <p>A simple budgeting method that allocates:</p>
+                                <ul>
+                                    <li><strong>50%</strong> for Needs (essentials)</li>
+                                    <li><strong>30%</strong> for Wants (lifestyle)</li>
+                                    <li><strong>20%</strong> for Savings & Investments</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card calc-result-card">
+                            <h3>Budget Allocation</h3>
+                            <div class="budget-breakdown">
+                                <div class="budget-item needs">
+                                    <div class="budget-item-header">
+                                        <span class="budget-item-label">Needs (50%)</span>
+                                        <span class="budget-item-amount" id="needsAmount">₹0</span>
+                                    </div>
+                                    <p>Rent, utilities, groceries, insurance, minimum debt payments</p>
+                                </div>
+                                <div class="budget-item wants">
+                                    <div class="budget-item-header">
+                                        <span class="budget-item-label">Wants (30%)</span>
+                                        <span class="budget-item-amount" id="wantsAmount">₹0</span>
+                                    </div>
+                                    <p>Dining out, entertainment, hobbies, shopping</p>
+                                </div>
+                                <div class="budget-item savings">
+                                    <div class="budget-item-header">
+                                        <span class="budget-item-label">Savings (20%)</span>
+                                        <span class="budget-item-amount" id="savingsAmount">₹0</span>
+                                    </div>
+                                    <p>Emergency fund, investments, retirement, debt payoff</p>
+                                </div>
+                            </div>
+                            <div class="chart-container" style="margin-top: 20px;">
+                                <canvas id="budgetChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Savings Goal Calculator -->
+                <div class="calculator-panel" id="savings-calculator">
+                    <div class="calc-grid">
+                        <div class="card calc-input-card">
+                            <h3>Savings Goal</h3>
+                            <div class="form-group">
+                                <label>Target Amount (₹)</label>
+                                <input type="number" id="targetAmount" value="500000" class="calc-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Current Savings (₹)</label>
+                                <input type="number" id="currentSavings" value="50000" class="calc-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Monthly Savings (₹)</label>
+                                <input type="number" id="monthlySavings" value="10000" class="calc-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Interest Rate (% per annum)</label>
+                                <input type="number" id="savingsInterest" value="6" step="0.1" class="calc-input">
+                            </div>
+                            <button class="btn btn-primary" id="calculateSavings">Calculate Timeline</button>
+                        </div>
+
+                        <div class="card calc-result-card">
+                            <h3>Goal Timeline</h3>
+                            <div class="savings-result">
+                                <div class="savings-timeline">
+                                    <div class="timeline-item">
+                                        <span class="timeline-label">Time to Goal</span>
+                                        <span class="timeline-value" id="timeToGoal">0 months</span>
+                                    </div>
+                                    <div class="timeline-progress">
+                                        <div class="timeline-bar">
+                                            <div class="timeline-fill" id="savingsProgress"></div>
+                                        </div>
+                                        <div class="timeline-info">
+                                            <span id="currentProgress">₹0</span>
+                                            <span id="targetProgress">₹0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="savings-tips">
+                                    <h4>Tips to reach your goal faster:</h4>
+                                    <ul id="savingsTips">
+                                        <!-- Populated by JS -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tax Calculator -->
+                <div class="calculator-panel" id="tax-calculator">
+                    <div class="calc-grid">
+                        <div class="card calc-input-card">
+                            <h3>Income Details</h3>
+                            <div class="form-group">
+                                <label>Annual Income (₹)</label>
+                                <input type="number" id="annualIncome" value="1200000" class="calc-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Tax Regime</label>
+                                <select id="taxRegime" class="calc-select">
+                                    <option value="old">Old Regime (with deductions)</option>
+                                    <option value="new">New Regime (without deductions)</option>
+                                </select>
+                            </div>
+                            <div class="form-group deductions-group" id="deductionsGroup">
+                                <label>Total Deductions (₹)</label>
+                                <input type="number" id="deductions" value="150000" class="calc-input">
+                                <small>Section 80C, 80D, HRA, etc.</small>
+                            </div>
+                            <button class="btn btn-primary" id="calculateTax">Calculate Tax</button>
+                        </div>
+
+                        <div class="card calc-result-card">
+                            <h3>Tax Breakdown</h3>
+                            <div class="tax-result">
+                                <div class="tax-main">
+                                    <span class="tax-label">Total Tax Payable</span>
+                                    <span class="tax-value" id="totalTax">₹0</span>
+                                </div>
+                                <div class="tax-details">
+                                    <div class="tax-detail-item">
+                                        <span>Gross Income</span>
+                                        <strong id="grossIncome">₹0</strong>
+                                    </div>
+                                    <div class="tax-detail-item">
+                                        <span>Taxable Income</span>
+                                        <strong id="taxableIncome">₹0</strong>
+                                    </div>
+                                    <div class="tax-detail-item">
+                                        <span>Tax Rate</span>
+                                        <strong id="effectiveTaxRate">0%</strong>
+                                    </div>
+                                    <div class="tax-detail-item total">
+                                        <span>Take Home</span>
+                                        <strong id="takeHome">₹0</strong>
+                                    </div>
+                                </div>
+                                <div class="tax-comparison" id="taxComparison">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Insights Page -->
+            <div class="page" id="ai-insights-page">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">AI-Powered Insights</h1>
+                        <p class="page-subtitle">Smart analysis and recommendations for better financial decisions</p>
+                    </div>
+                    <button class="btn btn-primary" id="refreshInsights">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path>
+                        </svg>
+                        Refresh Insights
+                    </button>
+                </div>
+
+                <div class="insights-grid">
+                    
+                    <!-- AI Chat Assistant -->
+                    <div class="card ai-chat-card">
+                        <div class="card-header">
+                            <h3>💬 Ask Financial Assistant</h3>
+                        </div>
+                        <div class="ai-chat" id="aiChat">
+                            <div class="chat-messages" id="chatMessages">
+                                <div class="chat-message assistant">
+                                    <div class="message-avatar">🤖</div>
+                                    <div class="message-content">
+                                        <p>Hello! I'm your AI financial assistant. Ask me anything about your finances:</p>
+                                        <div class="quick-questions">
+                                            <button class="quick-question">What's my biggest expense?</button>
+                                            <button class="quick-question">Am I on track with my budget?</button>
+                                            <button class="quick-question">Where can I save more?</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input-container">
+                                <input type="text" id="chatInput" placeholder="Ask a question..." class="chat-input">
+                                <button class="btn btn-primary" id="sendChatBtn">Send</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financial Health Score -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📊 Financial Health Score</h3>
+                        </div>
+                        <div class="health-score-detailed">
+                            <div class="score-circle-large">
+                                <svg viewBox="0 0 200 200">
+                                    <circle cx="100" cy="100" r="85" class="score-bg"></circle>
+                                    <circle cx="100" cy="100" r="85" class="score-fill" style="stroke-dasharray: 534; stroke-dashoffset: 133.5;"></circle>
+                                </svg>
+                                <div class="score-value-large">75</div>
+                                <div class="score-grade">Good</div>
+                            </div>
+                            <div class="score-breakdown">
+                                <div class="score-factor">
+                                    <div class="factor-info">
+                                        <span class="factor-name">Savings Rate</span>
+                                        <span class="factor-score">85/100</span>
+                                    </div>
+                                    <div class="factor-bar">
+                                        <div class="factor-fill" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                                <div class="score-factor">
+                                    <div class="factor-info">
+                                        <span class="factor-name">Budget Adherence</span>
+                                        <span class="factor-score">70/100</span>
+                                    </div>
+                                    <div class="factor-bar">
+                                        <div class="factor-fill" style="width: 70%"></div>
+                                    </div>
+                                </div>
+                                <div class="score-factor">
+                                    <div class="factor-info">
+                                        <span class="factor-name">Debt Management</span>
+                                        <span class="factor-score">90/100</span>
+                                    </div>
+                                    <div class="factor-bar">
+                                        <div class="factor-fill" style="width: 90%"></div>
+                                    </div>
+                                </div>
+                                <div class="score-factor">
+                                    <div class="factor-info">
+                                        <span class="factor-name">Emergency Fund</span>
+                                        <span class="factor-score">60/100</span>
+                                    </div>
+                                    <div class="factor-bar">
+                                        <div class="factor-fill" style="width: 60%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Smart Insights -->
+                    <div class="card insights-card">
+                        <div class="card-header">
+                            <h3>💡 Smart Insights</h3>
+                        </div>
+                        <div class="insights-list" id="smartInsights">
+                            <div class="insight-item positive">
+                                <div class="insight-icon">✅</div>
+                                <div class="insight-content">
+                                    <h4>Great savings rate!</h4>
+                                    <p>You're saving 15% more than last month. Keep up the excellent work!</p>
+                                </div>
+                            </div>
+                            <div class="insight-item warning">
+                                <div class="insight-icon">⚠️</div>
+                                <div class="insight-content">
+                                    <h4>Shopping spending increased</h4>
+                                    <p>You spent 25% more on shopping this month compared to your average. Consider setting a limit.</p>
+                                </div>
+                            </div>
+                            <div class="insight-item info">
+                                <div class="insight-icon">💰</div>
+                                <div class="insight-content">
+                                    <h4>Savings opportunity detected</h4>
+                                    <p>By reducing dining out by $100/month, you could save an extra $1,200/year.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Spending Predictions -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>🔮 Upcoming Bill Predictions</h3>
+                        </div>
+                        <div class="predictions-list">
+                            <div class="prediction-item">
+                                <div class="prediction-info">
+                                    <span class="prediction-name">Electricity Bill</span>
+                                    <span class="prediction-date">Due in 5 days</span>
+                                </div>
+                                <div class="prediction-amount">
+                                    <span class="predicted-label">Predicted:</span>
+                                    <span class="predicted-value">₹1,250</span>
+                                </div>
+                            </div>
+                            <div class="prediction-item">
+                                <div class="prediction-info">
+                                    <span class="prediction-name">Internet Bill</span>
+                                    <span class="prediction-date">Due in 12 days</span>
+                                </div>
+                                <div class="prediction-amount">
+                                    <span class="predicted-label">Predicted:</span>
+                                    <span class="predicted-value">₹899</span>
+                                </div>
+                            </div>
+                            <div class="prediction-item">
+                                <div class="prediction-info">
+                                    <span class="prediction-name">Credit Card Payment</span>
+                                    <span class="prediction-date">Due in 18 days</span>
+                                </div>
+                                <div class="prediction-amount">
+                                    <span class="predicted-label">Predicted:</span>
+                                    <span class="predicted-value">₹4,500</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Anomaly Detection -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>🚨 Anomaly Detection</h3>
+                        </div>
+                        <div class="anomalies-list">
+                            <div class="anomaly-item">
+                                <div class="anomaly-header">
+                                    <span class="anomaly-type">Unusual Transaction</span>
+                                    <span class="anomaly-time">2 hours ago</span>
+                                </div>
+                                <p>Transaction of ₹8,500 at "Premium Electronics" is 3x your average shopping expense.</p>
+                                <div class="anomaly-actions">
+                                    <button class="btn-link">Mark as normal</button>
+                                    <button class="btn-link alert">Report fraud</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations -->
+                    <div class="card recommendations-card">
+                        <div class="card-header">
+                            <h3>🎯 Personalized Recommendations</h3>
+                        </div>
+                        <div class="recommendations-list">
+                            <div class="recommendation-item">
+                                <div class="recommendation-badge">High Priority</div>
+                                <h4>Build Emergency Fund</h4>
+                                <p>You should have 3-6 months of expenses saved. Target: ₹1,50,000</p>
+                                <div class="recommendation-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 40%"></div>
+                                    </div>
+                                    <span>₹60,000 / ₹150,000</span>
+                                </div>
+                            </div>
+                            <div class="recommendation-item">
+                                <div class="recommendation-badge">Medium Priority</div>
+                                <h4>Optimize Subscriptions</h4>
+                                <p>You have 8 active subscriptions totaling ₹3,200/month. Consider canceling unused ones.</p>
+                                <button class="btn btn-secondary">Review Subscriptions</button>
+                            </div>
+                            <div class="recommendation-item">
+                                <div class="recommendation-badge">Low Priority</div>
+                                <h4>Increase Investment Allocation</h4>
+                                <p>Based on your income, you could invest an additional ₹5,000/month for better returns.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Cards Page -->
+            <div class="page" id="cards-page">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">My Cards</h1>
+                        <p class="page-subtitle">Manage your payment cards</p>
+                    </div>
+                    <button class="btn btn-primary" id="addCardBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Card
+                    </button>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="credit-card primary">
+                        <div class="card-chip"></div>
+                        <div class="card-number">•••• •••• •••• 4829</div>
+                        <div class="card-info">
+                            <div class="card-holder">
+                                <span class="label">Card Holder</span>
+                                <span class="value">John Doe</span>
+                            </div>
+                            <div class="card-expiry">
+                                <span class="label">Expires</span>
+                                <span class="value">12/26</span>
+                            </div>
+                        </div>
+                        <div class="card-brand">VISA</div>
+                    </div>
+
+                    <div class="credit-card secondary">
+                        <div class="card-chip"></div>
+                        <div class="card-number">•••• •••• •••• 8392</div>
+                        <div class="card-info">
+                            <div class="card-holder">
+                                <span class="label">Card Holder</span>
+                                <span class="value">John Doe</span>
+                            </div>
+                            <div class="card-expiry">
+                                <span class="label">Expires</span>
+                                <span class="value">09/27</span>
+                            </div>
+                        </div>
+                        <div class="card-brand">Mastercard</div>
+                    </div>
+
+                    <div class="credit-card tertiary">
+                        <div class="card-chip"></div>
+                        <div class="card-number">•••• •••• •••• 5621</div>
+                        <div class="card-info">
+                            <div class="card-holder">
+                                <span class="label">Card Holder</span>
+                                <span class="value">John Doe</span>
+                            </div>
+                            <div class="card-expiry">
+                                <span class="label">Expires</span>
+                                <span class="value">03/28</span>
+                            </div>
+                        </div>
+                        <div class="card-brand">AMEX</div>
+                    </div>
+                </div>
+
+                <div class="card-settings-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Card Settings</h3>
+                        </div>
+                        <div class="card-controls">
+                            <div class="control-item">
+                                <div class="control-info">
+                                    <h4>Daily Spending Limit</h4>
+                                    <p>Set maximum daily spending</p>
+                                </div>
+                                <div class="control-input">
+                                    <input type="range" id="spendingLimit" min="0" max="10000" value="2500" class="limit-slider">
+                                    <span class="limit-value">$2,500</span>
+                                </div>
+                            </div>
+                            <div class="control-item">
+                                <div class="control-info">
+                                    <h4>Card Lock</h4>
+                                    <p>Temporarily freeze your card</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="cardLock">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="control-item">
+                                <div class="control-info">
+                                    <h4>Contactless Payments</h4>
+                                    <p>Enable tap-to-pay</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="contactless" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="control-item">
+                                <div class="control-info">
+                                    <h4>Online Transactions</h4>
+                                    <p>Allow online purchases</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="onlineTransactions" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div class="page" id="settings-page">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Settings</h1>
+                        <p class="page-subtitle">Manage your account and preferences</p>
+                    </div>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Profile Information</h3>
+                        </div>
+                        <div class="profile-section">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop" alt="Profile" class="profile-image">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" value="John Doe" class="setting-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" value="john.doe@email.com" class="setting-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="tel" value="+1 (555) 123-4567" class="setting-input">
+                            </div>
+                            <button class="btn btn-primary">Update Profile</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Preferences</h3>
+                        </div>
+                        <div class="preferences-list">
+                            <div class="preference-item">
+                                <div class="preference-info">
+                                    <h4>Dark Mode</h4>
+                                    <p>Switch to dark theme</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="darkMode">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="preference-item">
+                                <div class="preference-info">
+                                    <h4>Email Notifications</h4>
+                                    <p>Receive transaction alerts</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="preference-item">
+                                <div class="preference-info">
+                                    <h4>Biometric Login</h4>
+                                    <p>Use fingerprint/face ID</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="biometric">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="preference-item">
+                                <div class="preference-info">
+                                    <h4>Currency</h4>
+                                    <p>Display currency</p>
+                                </div>
+                                <select class="setting-select">
+                                    <option>USD ($)</option>
+                                    <option>EUR (€)</option>
+                                    <option selected>INR (₹)</option>
+                                    <option>GBP (£)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Security</h3>
+                        </div>
+                        <div class="security-section">
+                            <button class="btn btn-secondary">Change Password</button>
+                            <button class="btn btn-secondary">Enable Two-Factor Authentication</button>
+                            <button class="btn btn-secondary">Manage Sessions</button>
+                            <button class="btn btn-danger">Delete Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Add Transaction Modal -->
+    <div class="modal" id="addTransactionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Transaction</h2>
+                <button class="modal-close" id="closeModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="transactionType" class="modal-input">
+                        <option value="expense">Expense</option>
+                        <option value="income">Income</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" id="transactionDescription" class="modal-input" placeholder="e.g., Grocery shopping">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="transactionCategory" class="modal-input">
+                        <option value="shopping">Shopping</option>
+                        <option value="food">Food & Dining</option>
+                        <option value="transport">Transport</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="bills">Bills & Utilities</option>
+                        <option value="salary">Salary</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="number" id="transactionAmount" class="modal-input" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="transactionDate" class="modal-input">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelTransaction">Cancel</button>
+                <button class="btn btn-primary" id="saveTransaction">Add Transaction</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
