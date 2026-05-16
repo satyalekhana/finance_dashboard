@@ -10,7 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+    </div>
+
     <!-- Sidebar Navigation -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -117,11 +120,15 @@
                         <circle cx="11" cy="11" r="8"></circle>
                         <path d="m21 21-4.35-4.35"></path>
                     </svg>
-                    <input type="text" placeholder="Search transactions, insights...">
+                    <input id="globalSearch" type="text" placeholder="Search transactions, insights...">
                 </div>
             </div>
             <div class="header-right">
-                <button class="icon-btn notification-btn">
+                <div class="header-meta">
+                    <span id="currentDateTime">Loading current time</span>
+                    <span class="notification-pill">3 new alerts</span>
+                </div>
+                <button class="icon-btn notification-btn" id="notificationBtn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
@@ -149,7 +156,7 @@
                         <p class="page-subtitle">Here's what's happening with your finances</p>
                     </div>
                     <div class="page-actions">
-                        <button class="btn btn-secondary">
+                        <button class="btn btn-secondary" id="dashboardExportBtn">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                 <polyline points="7 10 12 15 17 10"></polyline>
@@ -358,6 +365,26 @@
                     <div>
                         <h1 class="page-title">Transactions</h1>
                         <p class="page-subtitle">Manage and filter your transactions</p>
+                    </div>
+                </div>
+
+                <div class="transactions-controls">
+                    <div class="transactions-search">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <input id="transactionsSearch" type="text" placeholder="Search transactions, merchants, categories...">
+                    </div>
+                    <div class="transactions-actions">
+                        <select id="sortSelect" class="filter-select">
+                            <option value="date-desc">Sort by Date ↓</option>
+                            <option value="date-asc">Sort by Date ↑</option>
+                            <option value="amount-desc">Amount ↓</option>
+                            <option value="amount-asc">Amount ↑</option>
+                        </select>
+                        <button class="btn btn-secondary" id="exportCsvBtn">Export CSV</button>
+                        <button class="btn btn-secondary" id="exportPdfBtn">Export PDF</button>
                     </div>
                 </div>
 

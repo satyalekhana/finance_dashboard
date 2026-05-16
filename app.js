@@ -9,7 +9,8 @@ const state = {
     transactions: [],
     currentPage: 'dashboard',
     currentFilter: 'all',
-    currentCalc: 'emi'
+    currentCalc: 'emi',
+    theme: localStorage.getItem('theme') || 'dark'
 };
 
 // Sample transaction data
@@ -33,7 +34,9 @@ let charts = {};
 
 document.addEventListener('DOMContentLoaded', () => {
     state.transactions = [...sampleTransactions];
+    applyTheme();
     setTimeGreeting();
+    initHeaderTime();
     initNavigation();
     renderDashboard();
     initCharts();
@@ -41,8 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initAI();
     initModals();
     initMobileMenu();
+    initTransactionControls();
     initCardControls();
     initSettings();
+    animateDashboardCounters();
+    document.body.classList.add('loaded');
 });
 
 // ======================
@@ -126,11 +132,14 @@ function initNavigation() {
 }
 
 function navigateToPage(page) {
+    const pageElement = document.getElementById(`${page}-page`);
+    if (!pageElement) return;
+    
     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
     document.querySelector(`[data-page="${page}"]`).classList.add('active');
     
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(`${page}-page`).classList.add('active');
+    pageElement.classList.add('active');
     
     state.currentPage = page;
     
@@ -189,7 +198,9 @@ function initCharts() {
 function initSpendingChart() {
     const ctx = document.getElementById('spendingChart');
     if (!ctx) return;
-    
+
+    const gradient = createChartGradient(ctx, 'rgba(99, 102, 241, 0.35)', 'rgba(99, 102, 241, 0.05)');
+
     charts.spending = new Chart(ctx, {
         type: 'line',
         data: {
@@ -198,11 +209,15 @@ function initSpendingChart() {
                 label: 'Spending',
                 data: [420, 385, 510, 445, 390, 580, 520],
                 borderColor: '#6366f1',
-                backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                tension: 0.4,
+                backgroundColor: gradient,
+                tension: 0.42,
                 fill: true,
                 pointRadius: 4,
-                pointHoverRadius: 6
+                pointHoverRadius: 7,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#6366f1',
+                pointBorderWidth: 2,
+                borderWidth: 3
             }]
         },
         options: {
@@ -216,7 +231,7 @@ function initSpendingChart() {
                     bodyColor: '#94a3b8',
                     borderColor: '#2d3548',
                     borderWidth: 1,
-                    padding: 12,
+                    padding: 14,
                     displayColors: false,
                     callbacks: {
                         label: (context) => `$${context.parsed.y}`
@@ -246,16 +261,62 @@ function initSpendingChart() {
     });
 }
 
+function createChartGradient(ctx, startColor, endColor) {
+    const gradient = ctx.createLinearGradient(0, 0, 0, ctx.canvas.offsetHeight);
+    gradient.addColorStop(0, startColor);
+    gradient.addColorStop(1, endColor);
+    return gradient;
+}
+
 function updateSpendingChart(period) {
-    const data = {
-        week: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], values: [420, 385, 510, 445, 390, 580, 520] },
-        month: { labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], values: [1850, 2100, 1950, 2200] },
-        year: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], values: [3200, 3400, 3100, 3842, 3600, 3900, 3750, 3500, 3650, 3800, 3950, 4100] }
+    const dataSets = {
+        week: [420, 385, 510, 445, 390, 580, 520],
+        month: [470, 520, 495, 605, 580, 655, 720, 695, 760, 730, 810, 765],
+        year: [320, 360, 420, 500, 620, 580, 650, 690, 720, 780, 820, 880]
     };
-    
-    charts.spending.data.labels = data[period].labels;
-    charts.spending.data.datasets[0].data = data[period].values;
+
+    const labels = {
+        week: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        month: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        year: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    };
+
+    if (!charts.spending) return;
+    charts.spending.data.labels = labels[period] || labels.week;
+    charts.spending.data.datasets[0].data = dataSets[period] || dataSets.week;
     charts.spending.update();
+}
+
+function updateChartTheme() {
+    const isLight = state.theme === 'light';
+    const textColor = isLight ? '#475569' : '#94a3b8';
+    const gridColor = isLight ? '#e2e8f0' : '#2d3548';
+    const bgColor = isLight ? '#ffffff' : '#1e2332';
+
+    Object.values(charts).forEach(chart => {
+        if (!chart || !chart.options) return;
+        if (chart.options.plugins?.legend?.labels) {
+            chart.options.plugins.legend.labels.color = textColor;
+        }
+        if (chart.options.plugins?.tooltip) {
+            chart.options.plugins.tooltip.backgroundColor = bgColor;
+            chart.options.plugins.tooltip.titleColor = textColor;
+            chart.options.plugins.tooltip.bodyColor = textColor;
+        }
+        if (chart.options.scales?.y) {
+            chart.options.scales.y.ticks = chart.options.scales.y.ticks || {};
+            chart.options.scales.y.grid = chart.options.scales.y.grid || {};
+            chart.options.scales.y.ticks.color = textColor;
+            chart.options.scales.y.grid.color = gridColor;
+        }
+        if (chart.options.scales?.x) {
+            chart.options.scales.x.ticks = chart.options.scales.x.ticks || {};
+            chart.options.scales.x.grid = chart.options.scales.x.grid || {};
+            chart.options.scales.x.ticks.color = textColor;
+            chart.options.scales.x.grid.color = gridColor;
+        }
+        chart.update();
+    });
 }
 
 function initCategoryChart() {
@@ -282,6 +343,8 @@ function initCategoryChart() {
                 legend: { display: false },
                 tooltip: {
                     backgroundColor: '#1e2332',
+                    titleColor: '#f1f5f9',
+                    bodyColor: '#94a3b8',
                     callbacks: { label: (context) => `$${context.parsed}` }
                 }
             }
@@ -290,9 +353,10 @@ function initCategoryChart() {
     
     const legend = document.getElementById('categoryLegend');
     if (legend) {
+        const colors = ['#f59e0b', '#ef4444', '#3b82f6', '#8b5cf6', '#10b981'];
         legend.innerHTML = Object.entries(categories).map(([name, value], i) => `
             <div class="legend-item">
-                <div class="legend-color" style="background: ${['#f59e0b', '#ef4444', '#3b82f6', '#8b5cf6', '#10b981'][i]}"></div>
+                <div class="legend-color" style="background: ${colors[i]}"></div>
                 <span class="legend-label">${name}</span>
                 <span class="legend-value">$${value.toFixed(2)}</span>
             </div>
@@ -303,14 +367,16 @@ function initCategoryChart() {
 function initIncomeExpenseChart() {
     const ctx = document.getElementById('incomeExpenseChart');
     if (!ctx) return;
+    const incomeGradient = createChartGradient(ctx, 'rgba(16, 185, 129, 0.65)', 'rgba(16, 185, 129, 0.12)');
+    const expenseGradient = createChartGradient(ctx, 'rgba(239, 68, 68, 0.65)', 'rgba(239, 68, 68, 0.12)');
     
     charts.incomeExpense = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['Jan', 'Feb', 'Mar', 'Apr'],
             datasets: [
-                { label: 'Income', data: [8000, 8200, 8100, 8249.50], backgroundColor: '#10b981' },
-                { label: 'Expenses', data: [3500, 3700, 3600, 3842.75], backgroundColor: '#ef4444' }
+                { label: 'Income', data: [8000, 8200, 8100, 8249.50], backgroundColor: incomeGradient, borderColor: '#10b981', borderWidth: 1, borderRadius: 12 },
+                { label: 'Expenses', data: [3500, 3700, 3600, 3842.75], backgroundColor: expenseGradient, borderColor: '#ef4444', borderWidth: 1, borderRadius: 12 }
             ]
         },
         options: {
@@ -318,7 +384,12 @@ function initIncomeExpenseChart() {
             maintainAspectRatio: false,
             plugins: {
                 legend: { labels: { color: '#94a3b8' } },
-                tooltip: { backgroundColor: '#1e2332' }
+                tooltip: {
+                    backgroundColor: '#1e2332',
+                    titleColor: '#f1f5f9',
+                    bodyColor: '#94a3b8',
+                    callbacks: { label: (context) => `$${context.parsed.y}` }
+                }
             },
             scales: {
                 y: { beginAtZero: true, grid: { color: '#2d3548' }, ticks: { color: '#64748b' } },
@@ -331,6 +402,7 @@ function initIncomeExpenseChart() {
 function initNetWorthChart() {
     const ctx = document.getElementById('netWorthChart');
     if (!ctx) return;
+    const netWorthGradient = createChartGradient(ctx, 'rgba(99, 102, 241, 0.45)', 'rgba(99, 102, 241, 0.05)');
     
     charts.netWorth = new Chart(ctx, {
         type: 'line',
@@ -340,9 +412,12 @@ function initNetWorthChart() {
                 label: 'Net Worth',
                 data: [20000, 21500, 23000, 24563.89],
                 borderColor: '#6366f1',
-                backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                backgroundColor: netWorthGradient,
                 tension: 0.4,
-                fill: true
+                fill: true,
+                pointRadius: 4,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#6366f1'
             }]
         },
         options: {
@@ -350,7 +425,12 @@ function initNetWorthChart() {
             maintainAspectRatio: false,
             plugins: {
                 legend: { display: false },
-                tooltip: { backgroundColor: '#1e2332' }
+                tooltip: {
+                    backgroundColor: '#1e2332',
+                    titleColor: '#f1f5f9',
+                    bodyColor: '#94a3b8',
+                    callbacks: { label: (context) => `$${context.parsed.y}` }
+                }
             },
             scales: {
                 y: { beginAtZero: true, grid: { color: '#2d3548' }, ticks: { color: '#64748b' } },
@@ -391,9 +471,9 @@ function initCategoryBreakdownChart() {
 
 function renderTransactions() {
     const tbody = document.getElementById('transactionsList');
-    let filtered = state.currentFilter === 'all' ? state.transactions : state.transactions.filter(t => t.type === state.currentFilter);
-    
-    tbody.innerHTML = filtered.map(t => `
+    const transactions = getFilteredTransactions();
+
+    tbody.innerHTML = transactions.map(t => `
         <tr>
             <td>
                 <div style="display: flex; align-items: center; gap: 12px;">
@@ -407,25 +487,67 @@ function renderTransactions() {
             <td><span style="text-transform: capitalize; color: var(--text-secondary);">${t.category}</span></td>
             <td style="color: var(--text-secondary);">${formatDate(t.date)}</td>
             <td>
-                <span style="font-family: var(--font-mono); font-weight: 700; color: ${t.type === 'income' ? 'var(--success)' : 'var(--text-primary)'};">
+                <span style="font-family: var(--font-mono); font-weight: 700; color: ${t.type === 'income' ? 'var(--success)' : 'var(--danger)'};">
                     ${t.type === 'income' ? '+' : ''}${formatCurrency(t.amount)}
                 </span>
             </td>
             <td><span class="status-badge ${t.status}">${t.status}</span></td>
         </tr>
     `).join('');
-    
-    if (!document.querySelector('.filter-btn').hasAttribute('data-initialized')) {
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                state.currentFilter = btn.dataset.filter;
-                renderTransactions();
-            });
-        });
-        document.querySelector('.filter-btn').setAttribute('data-initialized', 'true');
+
+    initTransactionFilters();
+}
+
+function getFilteredTransactions() {
+    const searchInput = document.getElementById('transactionsSearch');
+    const globalSearch = document.getElementById('globalSearch');
+    const categoryFilter = document.getElementById('categoryFilter')?.value || 'all';
+    const dateFilter = document.getElementById('dateFilter')?.value;
+    const sortValue = document.getElementById('sortSelect')?.value || 'date-desc';
+    const searchQuery = [
+        searchInput?.value.toLowerCase().trim(),
+        globalSearch?.value.toLowerCase().trim()
+    ].filter(Boolean).join(' ');
+
+    let transactions = state.currentFilter === 'all' ? [...state.transactions] : state.transactions.filter(t => t.type === state.currentFilter);
+
+    if (categoryFilter !== 'all') {
+        transactions = transactions.filter(t => t.category === categoryFilter);
     }
+
+    if (dateFilter) {
+        transactions = transactions.filter(t => t.date === dateFilter);
+    }
+
+    if (searchQuery) {
+        transactions = transactions.filter(t => {
+            return [t.description, t.category, t.type, t.status].some(value => String(value).toLowerCase().includes(searchQuery));
+        });
+    }
+
+    transactions.sort((a, b) => {
+        if (sortValue === 'amount-desc') return b.amount - a.amount;
+        if (sortValue === 'amount-asc') return a.amount - b.amount;
+        if (sortValue === 'date-asc') return new Date(a.date) - new Date(b.date);
+        return new Date(b.date) - new Date(a.date);
+    });
+
+    return transactions;
+}
+
+function initTransactionFilters() {
+    if (document.querySelector('.filter-btn')?.hasAttribute('data-initialized')) return;
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            state.currentFilter = btn.dataset.filter;
+            renderTransactions();
+        });
+    });
+
+    document.querySelector('.filter-btn')?.setAttribute('data-initialized', 'true');
 }
 
 // ======================
@@ -830,8 +952,133 @@ function initCardControls() {
 function initSettings() {
     const darkMode = document.getElementById('darkMode');
     if (darkMode) {
+        darkMode.checked = state.theme === 'dark';
         darkMode.addEventListener('change', (e) => {
-            showToast(e.target.checked ? 'Dark mode enabled' : 'Dark mode disabled', 'info');
+            setTheme(e.target.checked ? 'dark' : 'light');
+            showToast(e.target.checked ? 'Dark mode enabled' : 'Light mode enabled', 'info');
         });
     }
+}
+
+function initTransactionControls() {
+    const search = document.getElementById('transactionsSearch');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const dateFilter = document.getElementById('dateFilter');
+    const sortSelect = document.getElementById('sortSelect');
+    const exportCsv = document.getElementById('exportCsvBtn');
+    const exportPdf = document.getElementById('exportPdfBtn');
+    const dashboardExport = document.getElementById('dashboardExportBtn');
+    const globalSearch = document.querySelector('.search-bar input');
+
+    [search, categoryFilter, dateFilter, sortSelect, globalSearch].forEach(control => {
+        if (!control) return;
+        control.addEventListener('input', () => renderTransactions());
+        control.addEventListener('change', () => renderTransactions());
+    });
+
+    exportCsv?.addEventListener('click', exportTransactionsCSV);
+    exportPdf?.addEventListener('click', exportTransactionsPDF);
+    dashboardExport?.addEventListener('click', exportTransactionsPDF);
+
+    if (globalSearch) {
+        globalSearch.addEventListener('input', () => {
+            if (state.currentPage === 'transactions') renderTransactions();
+        });
+    }
+
+    const notificationBtn = document.getElementById('notificationBtn');
+    notificationBtn?.addEventListener('click', () => {
+        showToast('You have 3 new finance alerts. Check your dashboard now.', 'info');
+    });
+}
+
+function exportTransactionsCSV() {
+    const rows = [['Description', 'Category', 'Date', 'Amount', 'Type', 'Status']];
+    getFilteredTransactions().forEach(t => {
+        rows.push([
+            t.description,
+            t.category,
+            formatDate(t.date),
+            t.type === 'income' ? `+${formatCurrency(t.amount)}` : formatCurrency(t.amount),
+            t.type,
+            t.status
+        ]);
+    });
+
+    const csv = rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', 'transactions.csv');
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+}
+
+function exportTransactionsPDF() {
+    const rows = getFilteredTransactions().map(t => `
+            <tr>
+                <td>${t.description}</td>
+                <td>${t.category}</td>
+                <td>${formatDate(t.date)}</td>
+                <td>${t.type === 'income' ? '+' : ''}${formatCurrency(t.amount)}</td>
+                <td>${t.status}</td>
+            </tr>
+        `).join('');
+
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`<!DOCTYPE html><html><head><title>Transactions</title><style>
+        body { font-family: Arial, sans-serif; padding: 24px; color: #111; }
+        table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #ddd; }
+        th { background: #f4f6fb; }
+        h1 { font-size: 20px; }
+    </style></head><body><h1>Transactions Export</h1><table><thead><tr><th>Description</th><th>Category</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></body></html>`);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+}
+
+function initHeaderTime() {
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+}
+
+function updateDateTime() {
+    const now = new Date();
+    const options = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
+    const dateTimeText = now.toLocaleString('en-US', options);
+    const element = document.getElementById('currentDateTime');
+    if (element) element.textContent = dateTimeText;
+}
+
+function applyTheme() {
+    const root = document.documentElement;
+    root.setAttribute('data-theme', state.theme);
+    document.getElementById('darkMode')?.checked = state.theme === 'dark';
+    updateChartTheme();
+}
+
+function setTheme(theme) {
+    state.theme = theme;
+    localStorage.setItem('theme', theme);
+    applyTheme();
+}
+
+function animateDashboardCounters() {
+    const counters = document.querySelectorAll('.stat-card .stat-value');
+    counters.forEach(counter => {
+        const targetText = counter.textContent.replace(/[^0-9.-]/g, '');
+        const prefix = counter.textContent.trim().startsWith('₹') ? '₹' : '$';
+        const target = parseFloat(targetText) || 0;
+        let start = 0;
+        const duration = 1400;
+        const step = (timestamp, startTime = performance.now()) => {
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+            const value = Math.round(progress * target);
+            counter.textContent = `${prefix}${value.toLocaleString()}`;
+            if (progress < 1) requestAnimationFrame(current => step(current, startTime));
+        };
+        requestAnimationFrame(step);
+    });
 }
