@@ -44,9 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initAI();
     initModals();
     initMobileMenu();
+    initSidebarCollapse();
     initTransactionControls();
     initCardControls();
     initSettings();
+    initThemeToggle();
     animateDashboardCounters();
     document.body.classList.add('loaded');
 });
@@ -223,6 +225,17 @@ function initSpendingChart() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: {
+                duration: 800,
+                easing: 'easeInOutQuart',
+                delay: (ctx) => {
+                    let delay = 0;
+                    if (ctx.type === 'data') {
+                        delay = ctx.dataIndex * 80 + ctx.datasetIndex * 100;
+                    }
+                    return delay;
+                }
+            },
             plugins: {
                 legend: { display: false },
                 tooltip: {
@@ -925,9 +938,25 @@ function initMobileMenu() {
     }
     
     document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !btn.contains(e.target)) {
+        if (window.innerWidth <= 768 && sidebar && btn && !sidebar.contains(e.target) && !btn.contains(e.target)) {
             sidebar.classList.remove('active');
         }
+    });
+}
+
+function initSidebarCollapse() {
+    const sidebar = document.getElementById('sidebar');
+    const collapseBtn = document.getElementById('sidebarToggle');
+    if (!sidebar || !collapseBtn) return;
+
+    const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+    if (isCollapsed) {
+        sidebar.classList.add('collapsed');
+    }
+
+    collapseBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+        localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
     });
 }
 
@@ -960,6 +989,40 @@ function initSettings() {
     }
 }
 
+function initThemeToggle() {
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    if (!themeToggleBtn) return;
+
+    updateThemeToggleIcon();
+    themeToggleBtn.addEventListener('click', () => {
+        const nextTheme = state.theme === 'dark' ? 'light' : 'dark';
+        setTheme(nextTheme);
+        showToast(nextTheme === 'dark' ? 'Dark mode enabled' : 'Light mode enabled', 'info');
+    });
+}
+
+function updateThemeToggleIcon() {
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    if (!themeToggleBtn) return;
+
+    themeToggleBtn.innerHTML = state.theme === 'dark'
+        ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 0 1 11.21 3 7 7 0 0 0 12 21a9 9 0 0 0 9-8.21Z"></path>
+            </svg>`
+        : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>`;
+    themeToggleBtn.setAttribute('aria-label', state.theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+}
+
 function initTransactionControls() {
     const search = document.getElementById('transactionsSearch');
     const categoryFilter = document.getElementById('categoryFilter');
@@ -970,10 +1033,25 @@ function initTransactionControls() {
     const dashboardExport = document.getElementById('dashboardExportBtn');
     const globalSearch = document.querySelector('.search-bar input');
 
+    const updateWithAnimation = () => {
+        const container = document.querySelector('.transactions-list') || document.querySelector('.transactions-table-wrapper');
+        if (container) {
+            container.style.opacity = '0.6';
+            container.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                renderTransactions();
+                container.style.opacity = '1';
+                container.style.transform = 'scale(1)';
+            }, 150);
+        } else {
+            renderTransactions();
+        }
+    };
+
     [search, categoryFilter, dateFilter, sortSelect, globalSearch].forEach(control => {
         if (!control) return;
-        control.addEventListener('input', () => renderTransactions());
-        control.addEventListener('change', () => renderTransactions());
+        control.addEventListener('input', updateWithAnimation);
+        control.addEventListener('change', updateWithAnimation);
     });
 
     exportCsv?.addEventListener('click', exportTransactionsCSV);
@@ -1056,6 +1134,7 @@ function applyTheme() {
     const root = document.documentElement;
     root.setAttribute('data-theme', state.theme);
     document.getElementById('darkMode')?.checked = state.theme === 'dark';
+    updateThemeToggleIcon();
     updateChartTheme();
 }
 

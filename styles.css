@@ -57,6 +57,8 @@
     --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+    --easing-smooth: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 /* Light Mode Variables */
@@ -94,11 +96,14 @@ html {
 
 body {
     font-family: var(--font-primary);
-    background: var(--bg-primary);
+    background: radial-gradient(circle at top left, rgba(99, 102, 241, 0.12), transparent 15%),
+                radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.08), transparent 18%),
+                var(--bg-primary);
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
     position: relative;
+    min-height: 100vh;
 }
 
 body::before {
@@ -141,12 +146,14 @@ body::before {
     top: 0;
     height: 100vh;
     width: 280px;
-    background: var(--bg-card);
-    border-right: 1px solid var(--border);
+    background: rgba(15, 18, 31, 0.92);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.18);
     display: flex;
     flex-direction: column;
     z-index: 1000;
-    transition: transform var(--transition-base);
+    transition: width var(--transition-base), transform var(--transition-base), border-color var(--transition-base);
+    backdrop-filter: blur(22px);
 }
 
 .sidebar-header {
@@ -208,11 +215,20 @@ body::before {
 }
 
 .sidebar-toggle {
-    display: none;
-    background: none;
-    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-full);
     cursor: pointer;
     padding: var(--spacing-sm);
+    transition: background var(--transition-base), transform var(--transition-base), border-color var(--transition-base);
+}
+
+.sidebar-toggle:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: scale(1.05);
 }
 
 .sidebar-toggle span {
@@ -222,6 +238,42 @@ body::before {
     background: var(--text-secondary);
     margin: 4px 0;
     transition: var(--transition-base);
+}
+
+.sidebar.collapsed {
+    width: 88px;
+}
+
+.sidebar.collapsed .sidebar-header {
+    justify-content: center;
+}
+
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .nav-item span,
+.sidebar.collapsed .badge,
+.sidebar.collapsed .sidebar-footer {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-nav {
+    padding: var(--spacing-md) 0;
+}
+
+.sidebar.collapsed .nav-item {
+    justify-content: center;
+    padding: var(--spacing-md) 0;
+}
+
+.sidebar.collapsed .nav-item svg {
+    margin: 0;
+}
+
+.sidebar.collapsed .nav-item.active {
+    background: rgba(99, 102, 241, 0.2);
+}
+
+.sidebar.collapsed + .main-content {
+    margin-left: 88px;
 }
 
 .sidebar-nav {
@@ -353,7 +405,8 @@ body::before {
 .main-content {
     margin-left: 280px;
     min-height: 100vh;
-    transition: margin-left var(--transition-base);
+    transition: margin-left var(--transition-base), padding var(--transition-base);
+    background: transparent;
 }
 
 /* Header */
@@ -423,6 +476,8 @@ body::before {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    transform: scale(1.02);
+    transition: all var(--transition-fast);
 }
 
 .header-meta {
@@ -488,6 +543,8 @@ body::before {
 
 .transactions-search input:focus {
     outline: none;
+    border-color: var(--primary);
+    transform: scale(1.01);
 }
 
 .transactions-actions {
@@ -543,9 +600,10 @@ body.loaded .loading-overlay {
 .analytics-grid > .card,
 .health-score,
 .health-score-detailed {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(18px);
+    background: rgba(15, 18, 31, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(22px);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.06), 0 8px 32px -8px rgba(0, 0, 0, 0.12);
 }
 
 [data-theme="light"] .card,
@@ -555,8 +613,9 @@ body.loaded .loading-overlay {
 [data-theme="light"] .transactions-table-wrapper,
 [data-theme="light"] .modal-content,
 [data-theme="light"] .filters-bar {
-    background: rgba(255, 255, 255, 0.85);
-    border-color: rgba(148, 163, 184, 0.2);
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(148, 163, 184, 0.3);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5), 0 8px 32px -8px rgba(0, 0, 0, 0.08);
 }
 
 .header-right {
@@ -676,6 +735,19 @@ body.loaded .loading-overlay {
     transform: scale(0.98);
 }
 
+.theme-toggle-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.theme-toggle-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
 .notification-dot {
     position: absolute;
     top: 8px;
@@ -729,7 +801,9 @@ body.loaded .loading-overlay {
 
 /* Page Container */
 .page-container {
-    padding: var(--spacing-xl);
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .page {
@@ -745,11 +819,22 @@ body.loaded .loading-overlay {
 @keyframes fadeInPage {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(12px);
     }
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes chartFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
     }
 }
 
@@ -847,13 +932,15 @@ body.loaded .loading-overlay {
 }
 
 .stat-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
+    background: rgba(15, 18, 31, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: var(--radius-xl);
     padding: var(--spacing-lg);
     transition: all var(--transition-base);
-    animation: slideUpStat 0.5s ease-out forwards;
+    animation: slideUpStat 0.6s var(--easing-smooth) forwards;
     opacity: 0;
+    backdrop-filter: blur(22px);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.06), 0 8px 32px -8px rgba(0, 0, 0, 0.12);
 }
 
 .stat-card:nth-child(1) { animation-delay: 0.1s; }
@@ -862,8 +949,38 @@ body.loaded .loading-overlay {
 .stat-card:nth-child(4) { animation-delay: 0.4s; }
 
 @keyframes slideUpStat {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.96);
+        filter: blur(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .stat-card:hover {
@@ -1029,6 +1146,8 @@ body.loaded .loading-overlay {
 .chart-container {
     height: 300px;
     position: relative;
+    animation: chartFadeIn 0.7s var(--easing-smooth) forwards;
+    opacity: 0;
 }
 
 /* Quick Transfer */
@@ -1320,14 +1439,15 @@ body.loaded .loading-overlay {
 
 .filter-btn {
     padding: var(--spacing-sm) var(--spacing-lg);
-    background: var(--bg-card);
-    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-md);
     color: var(--text-secondary);
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
     transition: all var(--transition-base);
+    backdrop-filter: blur(12px);
 }
 
 .filter-btn.active,
@@ -1335,6 +1455,8 @@ body.loaded .loading-overlay {
     background: var(--primary);
     color: white;
     border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
 }
 
 .filter-select,
@@ -1391,6 +1513,13 @@ body.loaded .loading-overlay {
 
 .transactions-table tbody tr:hover {
     background: var(--bg-tertiary);
+    transform: scale(1.01);
+    transition: all var(--transition-fast);
+}
+
+.transactions-list,
+.transactions-table-wrapper {
+    transition: opacity var(--transition-base), transform var(--transition-base);
 }
 
 .status-badge {
@@ -1559,11 +1688,13 @@ body.loaded .loading-overlay {
 }
 
 .calc-input,
-.calc-select {
+.calc-select,
+.setting-input,
+.setting-select {
     width: 100%;
     padding: var(--spacing-md);
     background: var(--bg-tertiary);
-    border: 1px solid var(--border);
+    border: 2px solid var(--border);
     border-radius: var(--radius-md);
     color: var(--text-primary);
     font-family: var(--font-primary);
@@ -1572,10 +1703,57 @@ body.loaded .loading-overlay {
 }
 
 .calc-input:focus,
-.calc-select:focus {
+.calc-select:focus,
+.setting-input:focus,
+.setting-select:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15), inset 0 0 0 1px rgba(99, 102, 241, 0.1);
+    transform: scale(1.01);
+}
+
+.calc-input.is-valid,
+.setting-input.is-valid {
+    border-color: var(--success);
+    background: rgba(16, 185, 129, 0.08);
+}
+
+.calc-input.is-invalid,
+.setting-input.is-invalid {
+    border-color: var(--danger);
+    background: rgba(239, 68, 68, 0.08);
+}
+
+.calc-input.is-valid:focus,
+.setting-input.is-valid:focus {
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15), inset 0 0 0 1px rgba(16, 185, 129, 0.1);
+}
+
+.calc-input.is-invalid:focus,
+.setting-input.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15), inset 0 0 0 1px rgba(239, 68, 68, 0.1);
+}
+
+.input-error {
+    font-size: 0.75rem;
+    color: var(--danger);
+    margin-top: var(--spacing-xs);
+    display: none;
+}
+
+.input-error.show {
+    display: block;
+}
+
+.input-success {
+    font-size: 0.75rem;
+    color: var(--success);
+    margin-top: var(--spacing-xs);
+    display: none;
+}
+
+.input-success.show {
+    display: block;
 }
 
 .calc-slider {
@@ -2901,12 +3079,14 @@ body.loaded .loading-overlay {
     
     .sidebar.active {
         transform: translateX(0);
-    animation: slideInSidebar 0.35s ease-out;
-}
+        animation: slideInSidebar 0.35s ease-out;
+    }
 
-@keyframes slideInSidebar {
-    from { transform: translateX(-100%); }
-    to { transform: translateX(0); }
+    @keyframes slideInSidebar {
+        from { transform: translateX(-100%); }
+        to { transform: translateX(0); }
+    }
+
     .sidebar-toggle,
     .mobile-menu-btn {
         display: block;

@@ -120,7 +120,7 @@
                         <circle cx="11" cy="11" r="8"></circle>
                         <path d="m21 21-4.35-4.35"></path>
                     </svg>
-                    <input id="globalSearch" type="text" placeholder="Search transactions, insights...">
+                    <input id="globalSearch" type="text" placeholder="Search transactions, insights..." aria-label="Search transactions and financial insights">
                 </div>
             </div>
             <div class="header-right">
@@ -128,7 +128,8 @@
                     <span id="currentDateTime">Loading current time</span>
                     <span class="notification-pill">3 new alerts</span>
                 </div>
-                <button class="icon-btn notification-btn" id="notificationBtn">
+                <button class="icon-btn theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle theme"></button>
+                <button class="icon-btn notification-btn" id="notificationBtn" aria-label="View notifications" aria-haspopup="menu">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
@@ -374,7 +375,7 @@
                             <circle cx="11" cy="11" r="8"></circle>
                             <path d="m21 21-4.35-4.35"></path>
                         </svg>
-                        <input id="transactionsSearch" type="text" placeholder="Search transactions, merchants, categories...">
+                        <input id="transactionsSearch" type="text" placeholder="Search transactions, merchants, categories..." aria-label="Search transactions by merchant or category">
                     </div>
                     <div class="transactions-actions">
                         <select id="sortSelect" class="filter-select">
@@ -395,7 +396,7 @@
                         <button class="filter-btn" data-filter="expense">Expense</button>
                     </div>
                     <div class="filter-group">
-                        <select class="filter-select" id="categoryFilter">
+                        <select class="filter-select" id="categoryFilter" aria-label="Filter transactions by category">
                             <option value="all">All Categories</option>
                             <option value="shopping">Shopping</option>
                             <option value="food">Food & Dining</option>
@@ -404,7 +405,7 @@
                             <option value="bills">Bills & Utilities</option>
                             <option value="salary">Salary</option>
                         </select>
-                        <input type="date" class="filter-date" id="dateFilter">
+                        <input type="date" class="filter-date" id="dateFilter" aria-label="Filter transactions by date">
                     </div>
                 </div>
 
@@ -520,7 +521,7 @@
                             <h3>Loan Details</h3>
                             <div class="form-group">
                                 <label>Loan Amount (₹)</label>
-                                <input type="number" id="loanAmount" value="1000000" class="calc-input">
+                                <input type="number" id="loanAmount" value="1000000" class="calc-input" aria-label="Loan amount in currency" required>
                                 <input type="range" id="loanAmountSlider" min="100000" max="10000000" step="100000" value="1000000" class="calc-slider">
                             </div>
                             <div class="form-group">
@@ -1134,15 +1135,15 @@
                             <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop" alt="Profile" class="profile-image">
                             <div class="form-group">
                                 <label>Full Name</label>
-                                <input type="text" value="John Doe" class="setting-input">
+                                <input type="text" value="John Doe" class="setting-input" aria-label="Full name" required>
                             </div>
                             <div class="form-group">
                                 <label>Email</label>
-                                <input type="email" value="john.doe@email.com" class="setting-input">
+                                <input type="email" value="john.doe@email.com" class="setting-input" aria-label="Email address" required>
                             </div>
                             <div class="form-group">
                                 <label>Phone</label>
-                                <input type="tel" value="+1 (555) 123-4567" class="setting-input">
+                                <input type="tel" value="+1 (555) 123-4567" class="setting-input" aria-label="Phone number" required>
                             </div>
                             <button class="btn btn-primary">Update Profile</button>
                         </div>
